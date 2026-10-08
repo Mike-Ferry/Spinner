@@ -766,17 +766,21 @@ function getMode() {
   const parts = new Intl.DateTimeFormat('en-US', {
     timeZone: 'America/Los_Angeles',
     weekday: 'short',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
     hourCycle: 'h23'
   }).formatToParts(new Date());
   const local = Object.fromEntries(parts.map(part => [part.type, part.value]));
+  const localDate = `${local.year}-${local.month}-${local.day}`;
   const minuteOfDay = Number(local.hour) * 60 + Number(local.minute);
   const isWeekendOfferWindow =
-    (local.weekday === 'Fri' && minuteOfDay >= 16 * 60 + 30) ||
-    local.weekday === 'Sat' ||
-    local.weekday === 'Sun' ||
-    (local.weekday === 'Mon' && minuteOfDay < 8 * 60);
+    (localDate === '2026-10-09' && minuteOfDay >= 16 * 60 + 30) ||
+    localDate === '2026-10-10' ||
+    localDate === '2026-10-11' ||
+    (localDate === '2026-10-12' && minuteOfDay < 8 * 60);
 
   return isWeekendOfferWindow ? 'ticket' : 'locked';
 }
